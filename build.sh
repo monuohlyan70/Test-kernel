@@ -1,13 +1,15 @@
 #/bin/bash
 #############################
 #      REQUIRED SETUP
-KSU=ndef # set to 1 to enable KernelSU; if not leave the same
+KSU=1 # set to 1 to enable KernelSU; if not leave the same
 
-DEFCONFIG=ndef # set preferred existing defconfig in arch/arm64/configs
+INMODULES=1 # set to 1 to include modules in updater zip 
+
+DEFCONFIG=qgki_defconfig # set preferred existing defconfig in arch/arm64/configs
                # or if arch/arm64/configs does not contain it, specify 
                # a defconfig in THE SAME DIRECTORY WITH build.sh
                
-KERNEL_SOURCE=ndef # set to a preferred remote URL (e.g https://github.com/torvalds/linux...)
+KERNEL_SOURCE=https://github.com/RedEnemy30/kernel_xiaomi_veux # set to a preferred remote URL (e.g https://github.com/torvalds/linux...)
 
 KBRANCH="" # if not changed, use default kernel branch
            # set to "-b <kernel branch name>" if you want to
@@ -73,7 +75,6 @@ startbuild () {
     echo Copying configs
     cp build.config.veux common/
     cp $DEFCONFIG common/arch/arm64/configs/
-    cp common/arch/arm64/configs/vendor/veux_QGKI.config common/arch/arm64/configs/perf_defconfig
     if [ $KSU = 1 ]; then
         if [[ ! -d common/drivers/kernelsu ]]; then
         echo Integrating KernelSU
@@ -134,11 +135,13 @@ envcheck () {
 }
 finalize () {
     if [ -e "out/android11-5.4/dist/Image" ]; then
-        set -x
-        sed -i 's/unknownversion/$(cat VERSION.txt)/g' AnyKernel3/anykernel.sh
-        if [ $KSU = 1 ]; then sed -i 's/do.systemless=0/do.systemless=1/g' AnyKernel3/anykernel.sh ; fi
         cp out/android11-5.4/dist/Image AnyKernel3
-        cp out/android11-5.4/dist/*.ko AnyKernel3/modules/system/lib/modules
+        sed -i "s/unknownversion/$(cat VERSION.txt)/g" AnyKernel3/anykernel.sh
+        if [ $INMODULES = 1 ]; then
+            if [ $KSU = 1 ]; then sed -i 's/do.systemless=0/do.systemless=1/g' AnyKernel3/anykernel.sh ; fi
+            cp out/android11-5.4/dist/*.ko AnyKernel3/modules/system/lib/modules
+            cp out/android11-5.4/dist/modules.* AnyKernel3/modules/system/lib/modules
+        fi       
         if [ $ISACTIONS = 1 ]; then echo Workflow will pack up zip file as artifact.
         else
             echo =========================
@@ -147,7 +150,6 @@ finalize () {
             zip -r5 AnyKernel3_veux-${VSUFFIX}_$(date +'%Y%m%d-%H%M').zip .
             mv *.zip .. && cd ..
         fi
-        set +x
     else
         echo Build ended prematurely. Exiting...
         exit 2
