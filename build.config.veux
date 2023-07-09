@@ -8,7 +8,6 @@ FILES="
 arch/arm64/boot/Image
 vmlinux
 System.map
-.version
 "
 BUILD_INITRAMFS=1
 IN_KERNEL_MODULES=1
