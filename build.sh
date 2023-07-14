@@ -1,21 +1,5 @@
 #/bin/bash
-#############################
-#      REQUIRED SETUP
-KSU=ndef # set to 1 to enable KernelSU; if not leave the same
-
-INMODULES=ndef # set to 1 to include modules in updater zip 
-
-DEFCONFIG=ndef # set preferred existing defconfig in arch/arm64/configs
-               # or if arch/arm64/configs does not contain it, specify 
-               # a defconfig in THE SAME DIRECTORY WITH build.sh
-               
-KERNEL_SOURCE=ndef # set to a preferred remote URL (e.g https://github.com/torvalds/linux...)
-
-KBRANCH="" # if not changed, use default kernel branch
-           # set to "-b <kernel branch name>" if you want to
-CLANGDL="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android11-qpr2-release/clang-r383902b1.tar.gz"
-        # direct link to Clang toolchain
-#############################
+. ./build.config.veux
 
 case $HOSTNAME in
   (fv-az*)  ISACTIONS=1 ;;
@@ -29,6 +13,8 @@ getsource () {
     set -x
     git clone --depth=1 $KERNEL_SOURCE $KBRANCH common
     set +x
+    else
+    echo "Source already downloaded, skipping..."
     fi
 }
 gettools () {
@@ -136,9 +122,9 @@ envcheck () {
 finalize () {
     if [ -e "out/android11-5.4/dist/Image" ]; then
         cp out/android11-5.4/dist/Image AnyKernel3
-        sed -i "s/unknownversion/$(cat VERSION.txt)/g" AnyKernel3/anykernel.sh
+        sed -i "s/unknownversion/${VSUFFIX}/g" AnyKernel3/anykernel.sh
         if [ $INMODULES = 1 ]; then
-            if [ $KSU = 1 ]; then sed -i 's/do.systemless=0/do.systemless=1/g' AnyKernel3/anykernel.sh ; fi
+            sed -i 's/do.modules=0/do.modules=1/g' AnyKernel3/anykernel.sh
             cp out/android11-5.4/dist/*.ko AnyKernel3/modules/system/lib/modules
             cp out/android11-5.4/dist/modules.* AnyKernel3/modules/system/lib/modules
         fi       
