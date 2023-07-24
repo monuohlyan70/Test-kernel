@@ -1,39 +1,38 @@
 name: Build standalone kernel
 
 on:
-  push:
-    branches:
-      [ main ]
   workflow_dispatch:
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-    - name: Checkout code
+    - name: Pre-build setup
       uses: actions/checkout@v3
-    
-    - name: Build setup
-      run: |
-        ./build.sh envcheck
-        echo "date=$(date +'%Y%m%d-%H%M')" >> "$GITHUB_ENV"
+      with: 
+        lfs: true
 
     - name: Download source
-      run: ./build.sh getsource
+      run: |
+        sudo chmod +x build.sh
+        ./build.sh getsource
     
     - name: Download prebuilts & scripts
-      run: ./build.sh gettools
+      run: |
+        ./build.sh gettools
 
     - name: Build kernel
-      run: ./build.sh startbuild
+      run: |
+        ./build.sh startbuild
 
     - name: Post-build
       run: |
         ./build.sh finalize
-        echo "sfx=$(cat VERSION.txt)" >> "$GITHUB_ENV"
 
-    - name: Upload updater zip
+    - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: AnyKernel3_veux-${{ env.sfx }}_${{ env.date }}
-        path: ./AnyKernel3
+        name: AnyKernel3_veux
+        path: | 
+          ./AnyKernel3
