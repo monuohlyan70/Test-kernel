@@ -1,15 +1,15 @@
 #/bin/bash
 #############################
 #      REQUIRED SETUP
-KSU=ndef # set to 1 to enable KernelSU; if not leave the same
+KSU=1 # set to 1 to enable KernelSU; if not leave the same
 
-DEFCONFIG=ndef # set preferred existing defconfig in arch/arm64/configs
+DEFCONFIG=qgki_defconfig # set preferred existing defconfig in arch/arm64/configs
                # or if arch/arm64/configs does not contain it, specify 
                # a defconfig in THE SAME DIRECTORY WITH build.sh
                
-KERNEL_SOURCE=ndef # set to a preferred remote URL (e.g https://github.com/torvalds/linux...)
+KERNEL_SOURCE=https://github.com/RedEnemy30/kernel_xiaomi_sm6375 # set to a preferred remote URL (e.g https://github.com/torvalds/linux...)
 
-ATBRANCH="" # if not changed, use default kernel branch
+ATBRANCH="-b moonstone" # if not changed, use default kernel branch
             # set to "-b <kernel branch name>" if you want to
 #############################
 
@@ -94,7 +94,7 @@ startbuild () {
     echo Copying configs
     cp build.config.veux common/
     cp $DEFCONFIG common/arch/arm64/configs/
-    cp common/arch/arm64/configs/vendor/veux_QGKI.config common/arch/arm64/configs/perf_defconfig
+    cp common/arch/arm64/configs/vendor/moonstone_QGKI.config common/arch/arm64/configs/perf_defconfig
     if [ $KSU = 1 ]; then
         echo Integrating KernelSU
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
