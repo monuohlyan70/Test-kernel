@@ -11,7 +11,7 @@ esac
 getsource () {
     if [ ! -d "common" ]; then
     echo Downloading kernel source...
-    git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource -b moonstone-s-oss common
+    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_veux-1 -b 11 common
     fi
 }
 gettools () {
@@ -56,7 +56,7 @@ startbuild () {
     echo Copying configs
     cp build.config.veux common/
     cp qgki_defconfig common/arch/arm64/configs/
-    cp common/arch/arm64/configs/vendor/moonstone_QGKI.config common/arch/arm64/configs/perf_defconfig
+    cp common/arch/arm64/configs/vendor/veux_QGKI.config common/arch/arm64/configs/perf_defconfig
     if [[ "$1" == *"-ksu"* ]] || [[ "$2" == *"-ksu"* ]] || [ $KSU = 1 ]; then
         echo Integrating KernelSU
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
