@@ -11,7 +11,7 @@ esac
 getsource () {
     if [ ! -d "common" ]; then
     echo Downloading kernel source...
-    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_veux -b oo common
+    git clone --depth=1 https://github.com/RedEnemy30/android_kernel_qcom_sm8350 -b veux common
     fi
 }
 gettools () {
