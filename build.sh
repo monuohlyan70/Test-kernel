@@ -11,7 +11,7 @@ esac
 getsource () {
     if [ ! -d "common" ]; then
     echo Downloading kernel source...
-    git clone --depth=1 https://github.com/RedEnemy30/android_kernel_qcom_sm8350 -b veux common
+    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_veux -b pick2 common
     fi
 }
 gettools () {
@@ -55,8 +55,8 @@ gettools () {
 startbuild () {
     echo Copying configs
     cp build.config.veux common/
-    cp qgki_defconfig common/arch/arm64/configs/
-    cp common/arch/arm64/configs/vendor/veux_QGKI.config common/arch/arm64/configs/perf_defconfig
+    #cp qgki_defconfig common/arch/arm64/configs/
+    #cp common/arch/arm64/configs/vendor/veux_QGKI.config common/arch/arm64/configs/perf_defconfig
     if [[ "$1" == *"-ksu"* ]] || [[ "$2" == *"-ksu"* ]] || [ $KSU = 1 ]; then
         echo Integrating KernelSU
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
