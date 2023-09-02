@@ -3,9 +3,9 @@
 #      REQUIRED SETUP
 KSU=1 # set to 1 to enable KernelSU; if not leave the same
 
-INMODULES=ndef # set to 1 to include modules in updater zip 
+INMODULES=1 # set to 1 to include modules in updater zip 
 
-DEFCONFIG=qgki_defconfig # set preferred existing defconfig in arch/arm64/configs
+DEFCONFIG=veuxg_defconfig # set preferred existing defconfig in arch/arm64/configs
                # or if arch/arm64/configs does not contain it, specify 
                # a defconfig in THE SAME DIRECTORY WITH build.sh
                
