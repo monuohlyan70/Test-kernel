@@ -11,7 +11,7 @@ esac
 getsource () {
     if [ ! -d "common" ]; then
     echo Downloading kernel source...
-    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_sm6375 -b fp common
+    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_sm6375 -b veuxx common
     fi
 }
 gettools () {
