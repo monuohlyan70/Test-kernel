@@ -1,7 +1,7 @@
 #/bin/bash
 
 #Uncomment for a KernelSU build
-KSU=1
+#KSU=1
 
 case $HOSTNAME in
   (fv-az*)  ISACTIONS=1 ;;
@@ -11,7 +11,7 @@ esac
 getsource () {
     if [ ! -d "common" ]; then
     echo Downloading kernel source...
-    git clone --depth=1 https://github.com/RedEnemy30/kernel_xiaomi_sm6375 -b fp common
+    git clone --depth=1 https://github.com/IamCexary/kernel_xiaomi_sm6375 -b main common
     fi
 }
 gettools () {
